@@ -14,8 +14,8 @@ import useUpdateTask from "../../hooks/useUpdateTask"
 import { useTask } from "../../hooks/useTask"
 
 const BUTTON_LABELS = {
-    EDIT_TASK: "Edit",
-    ADD_NEW_TASK: "Save"
+    EDIT_TASK: "Update Task",
+    ADD_NEW_TASK: "Add New Task"
 }
 
 const initialState = {
