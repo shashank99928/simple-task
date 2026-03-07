@@ -12,7 +12,6 @@ const taskSchema = z.object({
 import useCreateTask from "../../hooks/useCreateTask"
 import useUpdateTask from "../../hooks/useUpdateTask"
 import { useTask } from "../../hooks/useTask"
-import { useEffect } from "react"
 
 const BUTTON_LABELS = {
     EDIT_TASK: "Edit",
@@ -43,11 +42,6 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
     const [form, setForm] = useState<CreateTaskPayload & { completed?: boolean }>(initialData || initialState);
     const [errors, setErrors] = useState<{ title?: string }>({});
 
-    useEffect(() => {
-        if (initialData) {
-            setForm(initialData);
-        }
-    }, [initialData]);
 
 
     const handleSubmit = () => {

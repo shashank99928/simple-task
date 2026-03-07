@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { taskApi } from "../api/taskApi";
 import type { CreateTaskPayload } from "../types";
-import { useNotification } from "../components/common/Notification";
+import { useNotification } from "./useNotification";
 
 
 const useCreateTask = () => {

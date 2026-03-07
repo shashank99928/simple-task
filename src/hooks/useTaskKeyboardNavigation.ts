@@ -79,7 +79,6 @@ const useTaskKeyboardNavigation = ({
                     break;
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [focusedIndex, tasks, isPending, focusItem, onToggle, onDelete]
     );
 

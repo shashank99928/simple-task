@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { taskApi } from "../api/taskApi";
-import { useNotification } from "../components/common/Notification";
+import { useNotification } from "./useNotification";
 
 const useDeleteTask = () => {
     const queryClient = useQueryClient();

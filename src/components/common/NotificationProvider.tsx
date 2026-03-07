@@ -1,18 +1,8 @@
-import { createContext, useContext, useState, type ReactNode, type SyntheticEvent } from 'react';
+import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert, { type AlertColor } from '@mui/material/Alert';
-import type { NotificationContextType, NotificationState } from '../../types';
-
-
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
-
-export const useNotification = () => {
-    const context = useContext(NotificationContext);
-    if (!context) {
-        throw new Error("useNotification must be used within a NotificationProvider");
-    }
-    return context;
-};
+import type { NotificationState } from '../../types';
+import { NotificationContext } from './NotificationContext';
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     const [notification, setNotification] = useState<NotificationState>({

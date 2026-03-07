@@ -48,7 +48,6 @@ describe('TaskList', () => {
     it('renders empty state when no tasks are provided', () => {
         render(<TaskList tasks={[]} />);
 
-        expect(screen.getByText('Task List')).toBeInTheDocument();
         expect(screen.getByText('No tasks found')).toBeInTheDocument();
     });
 

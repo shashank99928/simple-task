@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { NotificationProvider, useNotification } from './Notification';
+import { NotificationProvider } from './NotificationProvider';
+import { useNotification } from '../../hooks/useNotification';
 import { useEffect } from 'react';
 
 // A simple test component to consume the notification context
