@@ -9,9 +9,11 @@ const useUpdateTask = () => {
 
     return useMutation({
         mutationFn: ({ id, payload }: { id: string, payload: UpdateTaskInput }) => taskApi.updateTask(id, payload),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] });
-            queryClient.invalidateQueries({ queryKey: ['task-details', variables.id] });
+        onSuccess: async (_, variables) => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+                queryClient.invalidateQueries({ queryKey: ['task-details', variables.id] })
+            ]);
             notify.notifySuccess("Updated Successfully");
         },
         onError: () => {

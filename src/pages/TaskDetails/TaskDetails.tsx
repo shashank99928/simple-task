@@ -13,7 +13,6 @@ import ConfirmationDialog from "../../components/common/ConfirmationDialog";
 import useDeleteTask from "../../hooks/useDeleteTask";
 import TaskForm from "../../components/tasks/TaskForm";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
-import { useTask } from "../../hooks/useTask";
 
 const TaskDetails = () => {
 
@@ -24,7 +23,6 @@ const TaskDetails = () => {
     const { mutate: deleteTask } = useDeleteTask();
 
     const { data: taskDetails, isLoading, isError } = useTaskDetails(id!);
-    const { refetch } = useTask();
 
     const { title, description, completed, createdAt } = taskDetails || {};
 
@@ -34,7 +32,6 @@ const TaskDetails = () => {
             deleteTask(id, {
                 onSuccess: () => {
                     navigate('/');
-                    refetch();
                 }
             });
         }

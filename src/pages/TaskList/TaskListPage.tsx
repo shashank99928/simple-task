@@ -7,7 +7,7 @@ import Button from "@mui/material/Button"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useTask } from "../../hooks/useTask"
 import type { Task, FilterType } from "../../types"
 
@@ -15,14 +15,14 @@ const TaskListPage = () => {
     const { data: taskList, isFetching, isError, refetch } = useTask();
     const [filter, setFilter] = useState<FilterType>("all");
 
-    const filteredTasks = (): Task[] => {
+    const filteredTasks = useMemo((): Task[] => {
         if (!taskList) return [];
         const tasks = [...taskList].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         if (filter === "completed") return tasks.filter(t => t.completed);
         if (filter === "incomplete") return tasks.filter(t => !t.completed);
         return tasks;
-    }
+    }, [taskList, filter]);
 
     if (isError) {
         return <>
@@ -53,7 +53,7 @@ const TaskListPage = () => {
             {!isFetching && (
                 <Box role="tabpanel" id="task-list-panel">
                     {/* Display Table */}
-                    <TaskList tasks={filteredTasks()} />
+                    <TaskList tasks={filteredTasks} />
                 </Box>
             )}
         </Container>

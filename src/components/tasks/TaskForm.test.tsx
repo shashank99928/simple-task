@@ -23,10 +23,9 @@ jest.mock('../../hooks/useUpdateTask', () => ({
     })
 }));
 
-const mockRefetch = jest.fn();
 jest.mock('../../hooks/useTask', () => ({
     useTask: () => ({
-        refetch: mockRefetch
+        refetch: jest.fn()
     })
 }));
 
@@ -119,7 +118,6 @@ describe('TaskForm', () => {
                 { title: 'New Task', description: 'New Description', completed: false },
                 expect.any(Object)
             );
-            expect(mockRefetch).toHaveBeenCalled();
             expect(onSuccessMock).toHaveBeenCalled();
 
             // Check if form is reset
@@ -154,7 +152,6 @@ describe('TaskForm', () => {
                 },
                 expect.any(Object)
             );
-            expect(mockRefetch).toHaveBeenCalled();
             expect(onSuccessMock).toHaveBeenCalled();
         });
     });

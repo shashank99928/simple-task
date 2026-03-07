@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback, Suspense, lazy } from "react";
 import { Link } from "react-router-dom"
-import { useTask } from "../../hooks/useTask"
 import type { Task } from "../../types"
 
 import Box from "@mui/material/Box"
@@ -11,27 +10,24 @@ import ListItemText from "@mui/material/ListItemText"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import IconButton from "@mui/material/IconButton"
 import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
-import ConfirmationDialog from "../common/ConfirmationDialog";
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from "@mui/material/CircularProgress";
 
 import useDeleteTask from "../../hooks/useDeleteTask";
 import useUpdateTask from "../../hooks/useUpdateTask"
 import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
 
-
+const ConfirmationDialog = lazy(() => import("../common/ConfirmationDialog"));
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const { mutate: deleteTask } = useDeleteTask();
-    const { refetch } = useTask();
     const { mutate: updateTask, isPending } = useUpdateTask();
 
-    const handleToggle = (formData: Task) => {
+    const handleToggle = useCallback((formData: Task) => {
         const payload = { ...formData, completed: !formData.completed };
-        updateTask({ id: formData.id as string, payload }, {
-            onSuccess: () => refetch(),
-        });
-    };
+        updateTask({ id: formData.id as string, payload });
+    }, [updateTask]);
 
     const { listRef, focusedIndex, setFocusedIndex, handleListKeyDown } =
         useTaskKeyboardNavigation({
@@ -108,16 +104,18 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                     </ListItem>
                 ))}
             </List>
-            <ConfirmationDialog
-                open={!!deleteId}
-                onClose={() => setDeleteId(null)}
-                onSuccess={() => {
-                    if (deleteId) {
-                        deleteTask(deleteId, { onSuccess: () => refetch() });
-                    }
-                    setDeleteId(null);
-                }}
-            />
+            <Suspense fallback={<CircularProgress size={20} />}>
+                <ConfirmationDialog
+                    open={!!deleteId}
+                    onClose={() => setDeleteId(null)}
+                    onSuccess={() => {
+                        if (deleteId) {
+                            deleteTask(deleteId);
+                        }
+                        setDeleteId(null);
+                    }}
+                />
+            </Suspense>
         </Box>
     )
 }

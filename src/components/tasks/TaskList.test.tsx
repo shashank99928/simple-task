@@ -28,10 +28,12 @@ jest.mock('../../hooks/useUpdateTask', () => ({
     })
 }));
 
-const mockRefetch = jest.fn();
 jest.mock('../../hooks/useTask', () => ({
     useTask: () => ({
-        refetch: mockRefetch
+        data: [],
+        isFetching: false,
+        isError: false,
+        refetch: jest.fn()
     })
 }));
 
@@ -81,8 +83,7 @@ describe('TaskList', () => {
         fireEvent.click(acceptButton);
 
         await waitFor(() => {
-            expect(mockDeleteMutate).toHaveBeenCalledWith('1', expect.any(Object));
-            expect(mockRefetch).toHaveBeenCalled();
+            expect(mockDeleteMutate).toHaveBeenCalledWith('1');
         });
     });
 
@@ -102,10 +103,8 @@ describe('TaskList', () => {
                 {
                     id: '1',
                     payload: { ...mockTasks[0], completed: true }
-                },
-                expect.any(Object)
+                }
             );
-            expect(mockRefetch).toHaveBeenCalled();
         });
     });
 });

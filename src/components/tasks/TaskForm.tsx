@@ -11,7 +11,6 @@ const taskSchema = z.object({
 });
 import useCreateTask from "../../hooks/useCreateTask"
 import useUpdateTask from "../../hooks/useUpdateTask"
-import { useTask } from "../../hooks/useTask"
 
 const BUTTON_LABELS = {
     EDIT_TASK: "Update Task",
@@ -38,7 +37,6 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
 
     const { mutate: createTask, isPending: isCreating } = useCreateTask()
     const { mutate: updateTask, isPending: isUpdating } = useUpdateTask()
-    const { refetch } = useTask();
     const [form, setForm] = useState<CreateTaskPayload & { completed?: boolean }>(initialData || initialState);
     const [errors, setErrors] = useState<{ title?: string }>({});
 
@@ -59,7 +57,6 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
         if (mode === "EDIT_TASK" && taskId) {
             updateTask({ id: taskId, payload: form as UpdateTaskInput }, {
                 onSuccess: () => {
-                    refetch();
                     if (onSuccess) onSuccess();
                 }
             });
@@ -67,7 +64,6 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
             createTask(form, {
                 onSuccess: () => {
                     setForm({ ...initialState });
-                    refetch();
                     if (onSuccess) onSuccess();
                 }
             });
