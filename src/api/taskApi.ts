@@ -1,52 +1,8 @@
 import axios from "axios";
 import type { CreateTaskPayload, Task, UpdateTaskInput } from "../types";
 
-
-const STORAGE_KEY = 'tasks_data';
-const DELAY_MS = 600;
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-
-const loadTasks = (): Task[] => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (data) {
-        return JSON.parse(data);
-    }
-
-    // Default data
-    const initialTasks: Task[] = [
-        {
-            id: '1',
-            title: 'Gym in the morning',
-            description: 'Legs and abs',
-            completed: true,
-            createdAt: new Date().toISOString(),
-        },
-        {
-            id: '2',
-            title: 'Workout in the evening ',
-            description: 'Chest and back light workout',
-            completed: true,
-            createdAt: new Date().toISOString(),
-        },
-        {
-            id: '3',
-            title: 'Buy Groceries',
-            description: 'Buy Groceries plant protien, peanuts butter, fruits, vegetables',
-            completed: false,
-            createdAt: new Date().toISOString(),
-        }
-    ];
-    saveTasks(initialTasks);
-    return initialTasks;
-};
-
-const saveTasks = (tasks: Task[]): void => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-};
-
-
+import { loadTasks, saveTasks, delay } from "../utils";
+import { DELAY_MS } from "../constants";
 
 // Create a custom axios instance
 const apiClient = axios.create({
