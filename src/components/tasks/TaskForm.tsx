@@ -7,7 +7,7 @@ import { useState } from "react"
 import { z } from "zod"
 
 const taskSchema = z.object({
-    title: z.string().min(1, "Title is mandatory").trim(),
+    title: z.string().trim().min(1, "Title is mandatory"),
 });
 import useCreateTask from "../../hooks/useCreateTask"
 import useUpdateTask from "../../hooks/useUpdateTask"

@@ -70,6 +70,38 @@ describe('TaskForm', () => {
         });
     });
 
+    it('shows validation error when title contains only spaces', async () => {
+        render(<TaskForm mode="ADD_NEW_TASK" />);
+
+        const titleInput = screen.getByLabelText(/Task Name/i);
+        fireEvent.change(titleInput, { target: { value: '   ' } });
+        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+
+        await waitFor(() => {
+            expect(screen.getByText('Title is mandatory')).toBeInTheDocument();
+            expect(mockCreateMutate).not.toHaveBeenCalled();
+        });
+    });
+
+    it('clears validation error when user starts typing', async () => {
+        render(<TaskForm mode="ADD_NEW_TASK" />);
+
+        // Trigger validation error
+        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+
+        await waitFor(() => {
+            expect(screen.getByText('Title is mandatory')).toBeInTheDocument();
+        });
+
+        // Type to clear error
+        const titleInput = screen.getByLabelText(/Task Name/i);
+        fireEvent.change(titleInput, { target: { value: 'a' } });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Title is mandatory')).not.toBeInTheDocument();
+        });
+    });
+
     it('creates a task successfully when valid input is provided', async () => {
         const onSuccessMock = jest.fn();
         render(<TaskForm mode="ADD_NEW_TASK" onSuccess={onSuccessMock} />);
