@@ -1,31 +1,22 @@
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import TaskForm from "../../components/tasks/TaskForm"
-import type { Task } from "../../types"
-import { taskApi } from "../../api/taskApi"
-import { useTask } from "../../hooks/useTask"
 import LoadingSpinner from "../../components/common/LoadingSpinner"
 import TaskList from "../../components/tasks/TaskList"
-import useCreateTask from "../../hooks/useCreateTask"
-
-
+import Button from "@mui/material/Button"
+import { useTask } from "../../hooks/useTask"
 
 
 const TaskListPage = () => {
-    const { data: taskList, isFetching, error, refetch } = useTask();
-    const { mutate: createTask, isPending } = useCreateTask()
+    const { data: taskList, isFetching, isError, refetch } = useTask();
 
 
-    const handleSubmit = (formData: Task) => {
-        createTask(formData, {
-            onSuccess: () => {
-                refetch()
-            }
-        })
+    if (isError) {
+        return <>
+            <Typography variant="h4">Error fetching tasks</Typography>
+            <Button variant="contained" color="primary" onClick={() => refetch()}>Retry</Button>
+        </>
     }
-
-
-
 
     return (
         <Container>

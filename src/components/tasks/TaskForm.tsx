@@ -14,7 +14,7 @@ import useUpdateTask from "../../hooks/useUpdateTask"
 import { useTask } from "../../hooks/useTask"
 import { useEffect } from "react"
 
-const ButtonTitle = {
+const BUTTON_LABELS = {
     EDIT_TASK: "Edit",
     ADD_NEW_TASK: "Save"
 }
@@ -120,7 +120,7 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: Tas
                 onChange={handleChange}
             />
 
-            <Button variant="contained" disabled={isPending} fullWidth onClick={handleSubmit}>{ButtonTitle[mode]}</Button>
+            <Button variant="contained" disabled={isPending} fullWidth onClick={handleSubmit}>{BUTTON_LABELS[mode]}</Button>
 
         </Container>
     )
