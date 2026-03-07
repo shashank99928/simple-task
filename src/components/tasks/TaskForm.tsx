@@ -2,15 +2,16 @@ import Container from "@mui/material/Container"
 
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
-import type { CreateTaskPayload } from "../../types"
+import type { CreateTaskPayload, UpdateTaskInput } from "../../types"
 import { useState } from "react"
 import useCreateTask from "../../hooks/useCreateTask"
+import useUpdateTask from "../../hooks/useUpdateTask"
 import { useTask } from "../../hooks/useTask"
-
+import { useEffect } from "react"
 
 const ButtonTitle = {
     EDIT_TASK: "Edit",
-    ADD_NEW_TASK: "Add"
+    ADD_NEW_TASK: "Save"
 }
 
 const initialState = {
@@ -22,21 +23,47 @@ const initialState = {
 
 
 
-const TaskForm = ({ mode = "ADD_NEW_TASK" }: { mode: "ADD_NEW_TASK" | "EDIT_TASK" }) => {
+interface TaskFormProps {
+    mode?: "ADD_NEW_TASK" | "EDIT_TASK";
+    taskId?: string;
+    initialData?: CreateTaskPayload & { completed?: boolean };
+    onSuccess?: () => void;
+}
 
-    const { mutate: createTask, isPending } = useCreateTask()
+const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: TaskFormProps) => {
+
+    const { mutate: createTask, isPending: isCreating } = useCreateTask()
+    const { mutate: updateTask, isPending: isUpdating } = useUpdateTask()
     const { refetch } = useTask();
-    const [form, setForm] = useState<CreateTaskPayload>(initialState);
+    const [form, setForm] = useState<CreateTaskPayload & { completed?: boolean }>(initialData || initialState);
+
+    useEffect(() => {
+        if (initialData) {
+            setForm(initialData);
+        }
+    }, [initialData]);
 
 
     const handleSubmit = () => {
-        createTask(form, {
-            onSuccess: () => {
-                setForm({ ...initialState, })
-                refetch()
-            }
-        })
+        if (mode === "EDIT_TASK" && taskId) {
+            updateTask({ id: taskId, payload: form as UpdateTaskInput }, {
+                onSuccess: () => {
+                    refetch();
+                    if (onSuccess) onSuccess();
+                }
+            });
+        } else {
+            createTask(form, {
+                onSuccess: () => {
+                    setForm({ ...initialState });
+                    refetch();
+                    if (onSuccess) onSuccess();
+                }
+            });
+        }
     }
+
+    const isPending = isCreating || isUpdating;
 
 
 
