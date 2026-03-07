@@ -1,5 +1,4 @@
 # Logs
-
 node_modules
 dist
 dist-ssr
@@ -8,3 +7,23 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+# Build outputs
+build/
+out/

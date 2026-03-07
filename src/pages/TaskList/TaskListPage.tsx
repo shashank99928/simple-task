@@ -1,15 +1,17 @@
-import Container from "@mui/material/Container"
-import Typography from "@mui/material/Typography"
+import Layout from "../../components/layout/layout"
 import TaskForm from "../../components/tasks/TaskForm"
 import LoadingSpinner from "../../components/common/LoadingSpinner"
 import TaskList from "../../components/tasks/TaskList"
-import Button from "@mui/material/Button"
+
+import Box from "@mui/material/Box"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
-import Box from "@mui/material/Box"
+import Divider from "@mui/material/Divider"
+
 import { useState, useMemo } from "react"
 import { useTask } from "../../hooks/useTask"
 import type { Task, FilterType } from "../../types"
+
 
 const TaskListPage = () => {
     const { data: taskList, isFetching, isError, refetch } = useTask();
@@ -25,15 +27,21 @@ const TaskListPage = () => {
     }, [taskList, filter]);
 
     if (isError) {
-        return <>
-            <Typography variant="h4">Error fetching tasks</Typography>
-            <Button variant="contained" color="primary" onClick={() => refetch()}>Retry</Button>
-        </>
+        return (
+            <Layout title="Task List">
+                <Box textAlign="center" mt={4}>
+                    <Box component="p" color="error.main" mb={2}>Error fetching tasks</Box>
+                    <button onClick={() => refetch()}>Retry</button>
+                </Box>
+            </Layout>
+        )
     }
 
     return (
-        <Container>
-            <Typography variant="h4" mt={2} textAlign="center" fontWeight="bold">Task List</Typography>
+        <Layout title="Task List">
+
+            <Divider sx={{ my: 2 }} />
+
             <TaskForm mode="ADD_NEW_TASK" />
 
             {/* Filter Tabs */}
@@ -56,9 +64,8 @@ const TaskListPage = () => {
                     <TaskList tasks={filteredTasks} />
                 </Box>
             )}
-        </Container>
+        </Layout>
     )
 }
-
 
 export default TaskListPage

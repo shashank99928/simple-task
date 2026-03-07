@@ -16,6 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useDeleteTask from "../../hooks/useDeleteTask";
 import useUpdateTask from "../../hooks/useUpdateTask"
 import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
+import notaskimage from "../../../public/notasks.svg"
 
 const ConfirmationDialog = lazy(() => import("../common/ConfirmationDialog"));
 
@@ -39,8 +40,11 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
 
     if (!tasks || tasks.length === 0) {
         return (
-            <Box sx={{ p: 2 }}>
-                <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>No tasks found</Typography>
+            <Box sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img src={notaskimage} width={100} height={100} alt="No tasks" loading="lazy" />
+                <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>
+                    No tasks found
+                </Typography>
             </Box>
         )
     }
