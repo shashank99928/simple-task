@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ConfirmationDialog from './ConfirmationDialog';
 
 describe('ConfirmationDialog', () => {
@@ -35,9 +36,10 @@ describe('ConfirmationDialog', () => {
         expect(queryByText('Are you sure?')).not.toBeVisible();
     });
 
-    it('calls onClose when Cancel button is clicked', () => {
+    it('calls onClose when Cancel button is clicked', async () => {
         const handleClose = jest.fn();
         const handleSuccess = jest.fn();
+        const user = userEvent.setup();
 
         render(
             <ConfirmationDialog
@@ -47,13 +49,15 @@ describe('ConfirmationDialog', () => {
             />
         );
 
-        fireEvent.click(screen.getByRole('button', { name: /Cancel/i }));
+        await user.click(screen.getByRole('button', { name: /Cancel/i }));
+
         expect(handleClose).toHaveBeenCalledTimes(1);
     });
 
-    it('calls onSuccess when Confirm Deletion button is clicked', () => {
+    it('calls onSuccess when Confirm Deletion button is clicked', async () => {
         const handleClose = jest.fn();
         const handleSuccess = jest.fn();
+        const user = userEvent.setup();
 
         render(
             <ConfirmationDialog
@@ -63,7 +67,8 @@ describe('ConfirmationDialog', () => {
             />
         );
 
-        fireEvent.click(screen.getByRole('button', { name: /Confirm Deletion/i }));
+        await user.click(screen.getByRole('button', { name: /Confirm Deletion/i }));
+
         expect(handleSuccess).toHaveBeenCalledTimes(1);
     });
 });
