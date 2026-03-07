@@ -15,7 +15,7 @@ jest.mock("@mui/material/ButtonBase/TouchRipple", () => ({
 
 // Suppress expected "act" warnings for suspended resources (lazy-loaded components)
 const originalError = console.error;
-console.error = (...args: any[]) => {
+console.error = (...args: unknown[]) => {
   const errorMessage = args[0]?.toString() || "";
   // Filter out expected Suspense boundary warnings
   if (
