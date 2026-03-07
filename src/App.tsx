@@ -1,19 +1,21 @@
+import { Suspense, lazy } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
-import TaskListPage from './pages/TaskList/TaskListPage'
-import TaskDetails from './pages/TaskDetails/TaskDetails'
-import NotFound from './components/common/NotFound'
+import LoadingSpinner from './components/common/LoadingSpinner'
+
+const TaskListPage = lazy(() => import('./pages/TaskList/TaskListPage'))
+const TaskDetails = lazy(() => import('./pages/TaskDetails/TaskDetails'))
+const NotFound = lazy(() => import('./components/common/NotFound'))
 
 function App() {
-
   return (
-    <>
+    <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         <Route path="/" element={<TaskListPage />} />
         <Route path="/task/:id" element={<TaskDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </Suspense>
   )
 }
 
