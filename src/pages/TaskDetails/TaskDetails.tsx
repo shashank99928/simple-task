@@ -13,6 +13,7 @@ import ConfirmationDialog from "../../components/common/ConfirmationDialog";
 import useDeleteTask from "../../hooks/useDeleteTask";
 import TaskForm from "../../components/tasks/TaskForm";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useTask } from "../../hooks/useTask";
 
 const TaskDetails = () => {
 
@@ -23,8 +24,22 @@ const TaskDetails = () => {
     const { mutate: deleteTask } = useDeleteTask();
 
     const { data: taskDetails, isLoading, isError } = useTaskDetails(id!);
+    const { refetch } = useTask();
 
     const { title, description, completed, createdAt } = taskDetails || {};
+
+
+    const handleDelete = () => {
+        if (id) {
+            deleteTask(id, {
+                onSuccess: () => {
+                    navigate('/');
+                    refetch();
+                }
+            });
+        }
+        setOpenDeleteDialog(false);
+    }
 
     if (isLoading) {
         return <LoadingSpinner />
@@ -99,16 +114,7 @@ const TaskDetails = () => {
             <ConfirmationDialog
                 open={openDeleteDialog}
                 onClose={() => setOpenDeleteDialog(false)}
-                onSucces={() => {
-                    if (id) {
-                        deleteTask(id, {
-                            onSuccess: () => {
-                                navigate('/');
-                            }
-                        });
-                    }
-                    setOpenDeleteDialog(false);
-                }}
+                onSuccess={handleDelete}
             />
         </Container >
     )
