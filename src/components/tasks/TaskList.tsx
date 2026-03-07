@@ -9,14 +9,30 @@ import { IconButton } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
+import Checkbox from '@mui/material/Checkbox';
 import useDeleteTask from "../../hooks/useDeleteTask";
 import { useTask } from "../../hooks/useTask"
+import useUpdateTask from "../../hooks/useUpdateTask"
 
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const { mutate: deleteTask } = useDeleteTask();
     const { refetch } = useTask();
+
+    const { mutate: updateTask, isPending } = useUpdateTask();
+
+    const handleToggleCheckbox = (formData: Task) => {
+        const payload = {
+            ...formData,
+            completed: !formData.completed
+        }
+        updateTask({ id: formData.id as string, payload }, {
+            onSuccess: () => {
+                refetch()
+            }
+        })
+    }
 
     if (!tasks || tasks.length === 0) {
         return (
@@ -39,9 +55,15 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                         </IconButton>
                     }>
                         <ListItemText primary={
-                            <Link to={`/task/${task.id}`}>
-                                <Typography component="span" sx={task.completed ? { textDecoration: 'line-through', color: 'gray' } : {}}>{index + 1}. {task.title}</Typography>
-                            </Link>
+                            <>
+                                <Checkbox disabled={isPending} checked={task.completed} onChange={() => {
+                                    handleToggleCheckbox(task)
+                                }} />
+
+                                <Link to={`/task/${task.id}`}>
+                                    <Typography component="span" sx={task.completed ? { textDecoration: 'line-through', color: 'gray' } : {}}>{index + 1}. {task.title}</Typography>
+                                </Link>
+                            </>
                         }
                         />
 
