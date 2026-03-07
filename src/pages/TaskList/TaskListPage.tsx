@@ -33,7 +33,7 @@ const TaskListPage = () => {
 
     return (
         <Container>
-            <Typography variant="h4">Task List</Typography>
+            <Typography variant="h4" mt={2} textAlign="center" fontWeight="bold">Task List</Typography>
             <TaskForm mode="ADD_NEW_TASK" />
 
             {/* Filter Tabs */}
