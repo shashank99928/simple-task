@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography"
 import { Link, useParams } from "react-router-dom"
 import useTaskDetails from "../../hooks/useTaskDetails";
 import { formatDate } from "../../utils/formatDate";
-import { Box, IconButton } from "@mui/material";
+import { Box, Divider, IconButton } from "@mui/material";
 import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../../components/common/ConfirmationDialog";
 import useDeleteTask from "../../hooks/useDeleteTask";
 import TaskForm from "../../components/tasks/TaskForm";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const TaskDetails = () => {
 
@@ -26,18 +27,19 @@ const TaskDetails = () => {
     const { title, description, completed, createdAt } = taskDetails || {};
 
     if (isLoading) {
-        return <Container>Loading...</Container>
+        return <LoadingSpinner />
     }
 
 
     return (
-        <Container>
+        <Container >
             <Link to="/"> <IconButton size="small"><ArrowBackIos /> </IconButton > Back to Task List</Link>
             {isError ? (
                 <Typography>Error loading task details</Typography>
             ) : openEditDialog ? (
-                <Container sx={{ mt: 4 }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>Edit Task</Typography>
+                <Container disableGutters sx={{ mt: 4 }}>
+                    <Typography variant="h5" >Edit Task</Typography>
+                    <Divider sx={{ my: 2 }} />
                     <TaskForm
                         mode="EDIT_TASK"
                         taskId={id}
@@ -47,8 +49,8 @@ const TaskDetails = () => {
 
                 </Container>
             ) : (
-                <Container>
-                    <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
+                <Container disableGutters>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 2 }}>
                         <Typography variant="h5">Task Details</Typography>
                         <Box>
                             <IconButton color="primary" onClick={() => setOpenEditDialog(true)}>
@@ -60,11 +62,37 @@ const TaskDetails = () => {
                         </Box>
                     </Box>
 
-                    <Box sx={{ mt: 2 }}>
-                        <Typography variant="h6">Task Name: {title}</Typography>
-                        <Typography variant="h6">Task Description: {description}</Typography>
-                        <Typography variant="h6">Task Status: {completed ? 'Completed' : 'Not Completed'}</Typography>
-                        <Typography variant="h6">Task Created At: {formatDate(createdAt)}</Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Box role="list" aria-label="Item Details">
+                        <Box role="listitem" aria-label={`Name: ${title}`}>
+                            <Typography variant="overline" color="text.secondary" aria-hidden="true">
+                                Name
+                            </Typography>
+                            <Typography variant="body1">{title}</Typography>
+                        </Box>
+
+                        <Box role="listitem" aria-label={`Description: ${description}`}>
+                            <Typography variant="overline" color="text.secondary" aria-hidden="true">
+                                Description
+                            </Typography>
+                            <Typography variant="body1">{description}</Typography>
+                        </Box>
+
+                        <Box role="listitem" aria-label={`Status: ${completed ? 'Completed' : 'Not Completed'}`}>
+                            <Typography variant="overline" color="text.secondary" aria-hidden="true">
+                                Status
+                            </Typography>
+                            <Typography variant="body1">
+                                {completed ? 'Completed' : 'Not Completed'}
+                            </Typography>
+                        </Box>
+
+                        <Box role="listitem" aria-label={`Created At: ${formatDate(createdAt)}`}>
+                            <Typography variant="overline" color="text.secondary" aria-hidden="true">
+                                Created At
+                            </Typography>
+                            <Typography variant="body1">{formatDate(createdAt)}</Typography>
+                        </Box>
                     </Box>
                 </Container>
             )}
