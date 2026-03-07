@@ -21,14 +21,14 @@ const loadTasks = (): Task[] => {
             title: 'Gym in the morning',
             description: 'Legs and abs',
             completed: true,
-            createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+            createdAt: new Date().toISOString(),
         },
         {
             id: '2',
             title: 'Workout in the evening ',
             description: 'Chest and back light workout',
             completed: true,
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
+            createdAt: new Date().toISOString(),
         },
         {
             id: '3',
