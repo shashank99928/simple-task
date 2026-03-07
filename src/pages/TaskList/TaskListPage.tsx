@@ -17,7 +17,7 @@ const TaskListPage = () => {
 
     const filteredTasks = (): Task[] => {
         if (!taskList) return [];
-        let tasks = [...taskList].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        const tasks = [...taskList].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         if (filter === "completed") return tasks.filter(t => t.completed);
         if (filter === "incomplete") return tasks.filter(t => !t.completed);
