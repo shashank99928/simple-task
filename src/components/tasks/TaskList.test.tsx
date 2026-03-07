@@ -76,7 +76,7 @@ describe('TaskList', () => {
 
         // Dialog should open
         expect(screen.getByText('Cancel')).toBeInTheDocument();
-        const acceptButton = screen.getByText('Accept');
+        const acceptButton = screen.getByText('Confirm Deletion');
 
         fireEvent.click(acceptButton);
 

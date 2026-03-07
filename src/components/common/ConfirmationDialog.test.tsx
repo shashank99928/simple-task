@@ -10,14 +10,14 @@ describe('ConfirmationDialog', () => {
             <ConfirmationDialog
                 open={true}
                 onClose={handleClose}
-                onSucces={handleSuccess}
+                onSuccess={handleSuccess}
             />
         );
 
-        expect(screen.getByText('Are you sure ?')).toBeInTheDocument();
-        expect(screen.getByText('This action cannot be undo.')).toBeInTheDocument();
+        expect(screen.getByText('Are you sure?')).toBeInTheDocument();
+        expect(screen.getByText('This action cannot be undone.')).toBeInTheDocument();
         expect(screen.getByText('Cancel')).toBeInTheDocument();
-        expect(screen.getByText('Accept')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
     });
 
     it('does not render when open is false', () => {
@@ -28,11 +28,11 @@ describe('ConfirmationDialog', () => {
             <ConfirmationDialog
                 open={false}
                 onClose={handleClose}
-                onSucces={handleSuccess}
+                onSuccess={handleSuccess}
             />
         );
 
-        expect(queryByText('Are you sure ?')).not.toBeVisible();
+        expect(queryByText('Are you sure?')).not.toBeVisible();
     });
 
     it('calls onClose when Cancel button is clicked', () => {
@@ -43,7 +43,7 @@ describe('ConfirmationDialog', () => {
             <ConfirmationDialog
                 open={true}
                 onClose={handleClose}
-                onSucces={handleSuccess}
+                onSuccess={handleSuccess}
             />
         );
 
@@ -51,7 +51,7 @@ describe('ConfirmationDialog', () => {
         expect(handleClose).toHaveBeenCalledTimes(1);
     });
 
-    it('calls onSucces when Accept button is clicked', () => {
+    it('calls onSuccess when Confirm Deletion button is clicked', () => {
         const handleClose = jest.fn();
         const handleSuccess = jest.fn();
 
@@ -59,11 +59,11 @@ describe('ConfirmationDialog', () => {
             <ConfirmationDialog
                 open={true}
                 onClose={handleClose}
-                onSucces={handleSuccess}
+                onSuccess={handleSuccess}
             />
         );
 
-        fireEvent.click(screen.getByRole('button', { name: /Accept/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Confirm Deletion/i }));
         expect(handleSuccess).toHaveBeenCalledTimes(1);
     });
 });

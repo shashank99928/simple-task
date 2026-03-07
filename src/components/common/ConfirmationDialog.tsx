@@ -17,7 +17,7 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ConfirmationDialog({ open, onClose, onSucces }: { open: boolean, onClose: () => void, onSucces: () => void }) {
+export default function ConfirmationDialog({ open, onClose, onSuccess }: { open: boolean, onClose: () => void, onSuccess: () => void }) {
 
 
     return (
@@ -31,16 +31,42 @@ export default function ConfirmationDialog({ open, onClose, onSucces }: { open: 
                 keepMounted
                 onClose={onClose}
                 aria-describedby="alert-dialog-slide-description"
+                slotProps={{
+                    paper: {
+                        sx: {
+                            borderRadius: 3,
+                            padding: 1,
+                            minWidth: 320
+                        }
+                    }
+                }}
             >
-                <DialogTitle>{"Are you sure ?"}</DialogTitle>
+                <DialogTitle sx={{ fontWeight: 600, pb: 1 }}>
+                    {"Are you sure?"}
+                </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        This action cannot be undo.
+                    <DialogContentText id="alert-dialog-slide-description" sx={{ color: 'text.secondary' }}>
+                        This action cannot be undone.
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>Cancel</Button>
-                    <Button onClick={onSucces}>Accept</Button>
+                <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                    <Button
+                        onClick={onClose}
+                        variant="outlined"
+                        color="inherit"
+                        sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 500 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={onSuccess}
+                        variant="contained"
+                        color="error"
+                        autoFocus
+                        sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, boxShadow: 'none', '&:hover': { boxShadow: 'none' } }}
+                    >
+                        Confirm Deletion
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Fragment >

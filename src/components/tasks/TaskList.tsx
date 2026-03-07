@@ -106,7 +106,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
             <ConfirmationDialog
                 open={!!deleteId}
                 onClose={() => setDeleteId(null)}
-                onSucces={() => {
+                onSuccess={() => {
                     if (deleteId) {
                         deleteTask(deleteId, { onSuccess: () => refetch() });
                     }
