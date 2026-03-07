@@ -24,3 +24,5 @@ export interface NotificationContextType {
 
 export type CreateTaskPayload = Omit<Task, 'id' | 'createdAt' | 'completed'>;
 export type UpdateTaskInput = Omit<Task, 'id' | 'createdAt'>;
+
+export type FilterType = "all" | "completed" | "incomplete"

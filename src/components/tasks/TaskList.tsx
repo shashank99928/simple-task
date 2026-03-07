@@ -1,17 +1,20 @@
-import Container from "@mui/material/Container"
-import Typography from "@mui/material/Typography"
+import { useState } from "react";
+import { Link } from "react-router-dom"
+import { useTask } from "../../hooks/useTask"
 import type { Task } from "../../types"
+
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
-import { Link } from "react-router-dom"
-import { IconButton } from "@mui/material"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import IconButton from "@mui/material/IconButton"
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from "react";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import Checkbox from '@mui/material/Checkbox';
+
 import useDeleteTask from "../../hooks/useDeleteTask";
-import { useTask } from "../../hooks/useTask"
 import useUpdateTask from "../../hooks/useUpdateTask"
 import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
 
@@ -39,15 +42,15 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
 
     if (!tasks || tasks.length === 0) {
         return (
-            <Container>
+            <Box sx={{ p: 2 }}>
                 <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>No tasks found</Typography>
-            </Container>
+            </Box>
         )
     }
 
     return (
-        <Container sx={{ mt: 2 }}>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+        <Box sx={{ mt: 2 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block", px: 2 }}>
                 💡 Keyboard: ↑↓ navigate · Enter/Space toggle · Delete remove
             </Typography>
             <List
@@ -80,24 +83,25 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                             </IconButton>
                         }
                     >
+                        <ListItemIcon sx={{ minWidth: 40 }}>
+                            <Checkbox
+                                disabled={isPending}
+                                checked={task.completed}
+                                tabIndex={-1}
+                                onChange={() => handleToggle(task)}
+                                inputProps={{ "aria-label": `mark ${task.title} as ${task.completed ? "incomplete" : "complete"}` }}
+                                sx={{ p: 0.5 }}
+                            />
+                        </ListItemIcon>
                         <ListItemText primary={
-                            <>
-                                <Checkbox
-                                    disabled={isPending}
-                                    checked={task.completed}
-                                    tabIndex={-1}
-                                    onChange={() => handleToggle(task)}
-                                    inputProps={{ "aria-label": `mark ${task.title} as ${task.completed ? "incomplete" : "complete"}` }}
-                                />
-                                <Link to={`/task/${task.id}`} tabIndex={-1}>
-                                    <Typography
-                                        component="span"
-                                        sx={task.completed ? { textDecoration: "line-through", color: "gray" } : {}}
-                                    >
-                                        {index + 1}. {task.title}
-                                    </Typography>
-                                </Link>
-                            </>
+                            <Link to={`/task/${task.id}`} tabIndex={-1} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Typography
+                                    component="span"
+                                    sx={task.completed ? { textDecoration: "line-through", color: "gray" } : {}}
+                                >
+                                    {index + 1}. {task.title}
+                                </Typography>
+                            </Link>
                         }
                         />
                     </ListItem>
@@ -113,7 +117,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                     setDeleteId(null);
                 }}
             />
-        </Container>
+        </Box>
     )
 }
 

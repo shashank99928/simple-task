@@ -1,5 +1,3 @@
-import Container from "@mui/material/Container"
-
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import type { CreateTaskPayload, UpdateTaskInput } from "../../types"
@@ -91,7 +89,7 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
 
 
     return (
-        <Container>
+        <>
             <TextField
                 name="title"
                 label="Task Name"
@@ -116,7 +114,7 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
 
             <Button variant="contained" disabled={isPending} fullWidth onClick={handleSubmit}>{BUTTON_LABELS[mode]}</Button>
 
-        </Container>
+        </>
     )
 }
 

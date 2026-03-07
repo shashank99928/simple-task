@@ -9,9 +9,7 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import { useState } from "react"
 import { useTask } from "../../hooks/useTask"
-import type { Task } from "../../types"
-
-type FilterType = "all" | "completed" | "incomplete"
+import type { Task, FilterType } from "../../types"
 
 const TaskListPage = () => {
     const { data: taskList, isFetching, isError, refetch } = useTask();
@@ -39,7 +37,7 @@ const TaskListPage = () => {
             <TaskForm mode="ADD_NEW_TASK" />
 
             {/* Filter Tabs */}
-            <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2 }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2, px: 2 }}>
                 <Tabs
                     value={filter}
                     onChange={(_e, val: FilterType) => setFilter(val)}
