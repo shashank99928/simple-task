@@ -4,6 +4,11 @@ import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import type { CreateTaskPayload, UpdateTaskInput } from "../../types"
 import { useState } from "react"
+import { z } from "zod"
+
+const taskSchema = z.object({
+    title: z.string().min(1, "Title is mandatory").trim(),
+});
 import useCreateTask from "../../hooks/useCreateTask"
 import useUpdateTask from "../../hooks/useUpdateTask"
 import { useTask } from "../../hooks/useTask"
@@ -36,6 +41,7 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: Tas
     const { mutate: updateTask, isPending: isUpdating } = useUpdateTask()
     const { refetch } = useTask();
     const [form, setForm] = useState<CreateTaskPayload & { completed?: boolean }>(initialData || initialState);
+    const [errors, setErrors] = useState<{ title?: string }>({});
 
     useEffect(() => {
         if (initialData) {
@@ -45,6 +51,17 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: Tas
 
 
     const handleSubmit = () => {
+        try {
+            taskSchema.parse(form);
+            setErrors({});
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                const formattedErrors = error.format();
+                setErrors({ title: formattedErrors.title?._errors[0] });
+            }
+            return;
+        }
+
         if (mode === "EDIT_TASK" && taskId) {
             updateTask({ id: taskId, payload: form as UpdateTaskInput }, {
                 onSuccess: () => {
@@ -73,6 +90,9 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: Tas
             ...prev,
             [name]: value
         }));
+        if (name === "title" && errors.title) {
+            setErrors(prev => ({ ...prev, title: undefined }));
+        }
     }
 
 
@@ -87,6 +107,8 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: Tas
                 value={form.title}
                 onChange={handleChange}
                 required
+                error={!!errors.title}
+                helperText={errors.title}
             />
             <TextField
                 name="description"
