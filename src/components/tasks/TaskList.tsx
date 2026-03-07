@@ -10,13 +10,14 @@ import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import IconButton from "@mui/material/IconButton"
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import Checkbox from '@mui/material/Checkbox';
 
 import useDeleteTask from "../../hooks/useDeleteTask";
 import useUpdateTask from "../../hooks/useUpdateTask"
 import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
+
 
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
@@ -79,7 +80,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                                 onClick={() => setDeleteId(task.id as string)}
                                 tabIndex={-1}
                             >
-                                <DeleteIcon color="error" />
+                                <DeleteOutlined color="error" />
                             </IconButton>
                         }
                     >
