@@ -13,6 +13,9 @@ const useUpdateTask = () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
             queryClient.invalidateQueries({ queryKey: ['task-details', variables.id] });
             notify.notifySuccess("Updated Successfully");
+        },
+        onError: () => {
+            notify.notifyError("Failed to update task");
         }
     });
 }

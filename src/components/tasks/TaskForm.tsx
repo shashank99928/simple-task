@@ -35,7 +35,7 @@ interface TaskFormProps {
     onSuccess?: () => void;
 }
 
-const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess }: TaskFormProps) => {
+const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () => { } }: TaskFormProps) => {
 
     const { mutate: createTask, isPending: isCreating } = useCreateTask()
     const { mutate: updateTask, isPending: isUpdating } = useUpdateTask()
