@@ -14,7 +14,7 @@ const useCreateTask = () => {
         mutationFn: (payload: CreateTaskPayload) => taskApi.createTask(payload),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['tasks'] });
-            notfiy.notifySuccess("Created Succesfully")
+            notfiy.notifySuccess("Created Successfully")
         }
     })
 

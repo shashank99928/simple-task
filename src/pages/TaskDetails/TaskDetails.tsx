@@ -17,6 +17,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import Layout from "../../components/layout/layout";
 import TaskDetail from "../../components/tasks/TaskDetail";
 
+
 const TaskDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -24,19 +25,23 @@ const TaskDetails = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
 
-    const { mutate: deleteTask } = useDeleteTask();
+    const { mutate: deleteTask, isPending: deletePending } = useDeleteTask();
+
     const { data: taskDetails, isLoading, isError } = useTaskDetails(id!);
 
     const handleDelete = () => {
         if (id) {
             deleteTask(id, {
-                onSuccess: () => navigate('/')
+                onSuccess: () => {
+                    // refetch();
+                    navigate('/');
+                }
             });
         }
         setOpenDeleteDialog(false);
     }
 
-    if (isLoading) return <LoadingSpinner />;
+    if (isLoading || deletePending) return <LoadingSpinner />;
 
     if (isError || !taskDetails) {
         return (

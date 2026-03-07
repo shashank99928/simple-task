@@ -16,7 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useDeleteTask from "../../hooks/useDeleteTask";
 import useUpdateTask from "../../hooks/useUpdateTask"
 import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
-import notaskimage from "../../../public/notasks.svg"
+const notaskimage = "/notasks.svg";
 
 const ConfirmationDialog = lazy(() => import("../common/ConfirmationDialog"));
 

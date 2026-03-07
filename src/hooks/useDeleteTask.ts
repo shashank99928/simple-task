@@ -8,8 +8,11 @@ const useDeleteTask = () => {
 
     return useMutation({
         mutationFn: (id: string) => taskApi.deleteTask(id),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['tasks'] });
+        onSuccess: async (_, id) => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+                queryClient.invalidateQueries({ queryKey: ['task-details', id] })
+            ]);
             notify.notifySuccess("Deleted Successfully")
         }
     })
