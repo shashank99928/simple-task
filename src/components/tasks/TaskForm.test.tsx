@@ -40,7 +40,7 @@ describe('TaskForm', () => {
 
         expect(screen.getByLabelText(/Task Name/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/Task Description/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Save/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Add New Task/i })).toBeInTheDocument();
     });
 
     it('renders Edit Task mode correctly', () => {
@@ -56,13 +56,13 @@ describe('TaskForm', () => {
 
         expect(screen.getByLabelText(/Task Name/i)).toHaveValue('Test Task');
         expect(screen.getByLabelText(/Task Description/i)).toHaveValue('Test Description');
-        expect(screen.getByRole('button', { name: /Edit/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Update Task/i })).toBeInTheDocument();
     });
 
     it('shows validation error when title is empty and form is submitted', async () => {
         render(<TaskForm mode="ADD_NEW_TASK" />);
 
-        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Add New Task/i }));
 
         await waitFor(() => {
             expect(screen.getByText('Title is mandatory')).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe('TaskForm', () => {
 
         const titleInput = screen.getByLabelText(/Task Name/i);
         fireEvent.change(titleInput, { target: { value: '   ' } });
-        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Add New Task/i }));
 
         await waitFor(() => {
             expect(screen.getByText('Title is mandatory')).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe('TaskForm', () => {
         render(<TaskForm mode="ADD_NEW_TASK" />);
 
         // Trigger validation error
-        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Add New Task/i }));
 
         await waitFor(() => {
             expect(screen.getByText('Title is mandatory')).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('TaskForm', () => {
         fireEvent.change(titleInput, { target: { value: 'New Task' } });
         fireEvent.change(descInput, { target: { value: 'New Description' } });
 
-        fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Add New Task/i }));
 
         await waitFor(() => {
             expect(mockCreateMutate).toHaveBeenCalledWith(
@@ -144,7 +144,7 @@ describe('TaskForm', () => {
         const titleInput = screen.getByLabelText(/Task Name/i);
         fireEvent.change(titleInput, { target: { value: 'Updated Task' } });
 
-        fireEvent.click(screen.getByRole('button', { name: /Edit/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Update Task/i }));
 
         await waitFor(() => {
             expect(mockUpdateMutate).toHaveBeenCalledWith(
