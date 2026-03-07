@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import ConfirmationDialog from './ConfirmationDialog';
 
 describe('ConfirmationDialog', () => {
@@ -33,5 +33,37 @@ describe('ConfirmationDialog', () => {
         );
 
         expect(queryByText('Are you sure ?')).not.toBeVisible();
+    });
+
+    it('calls onClose when Cancel button is clicked', () => {
+        const handleClose = jest.fn();
+        const handleSuccess = jest.fn();
+
+        render(
+            <ConfirmationDialog
+                open={true}
+                onClose={handleClose}
+                onSucces={handleSuccess}
+            />
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /Cancel/i }));
+        expect(handleClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls onSucces when Accept button is clicked', () => {
+        const handleClose = jest.fn();
+        const handleSuccess = jest.fn();
+
+        render(
+            <ConfirmationDialog
+                open={true}
+                onClose={handleClose}
+                onSucces={handleSuccess}
+            />
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /Accept/i }));
+        expect(handleSuccess).toHaveBeenCalledTimes(1);
     });
 });
