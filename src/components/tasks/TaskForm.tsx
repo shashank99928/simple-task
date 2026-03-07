@@ -1,5 +1,7 @@
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
+import SaveIcon from '@mui/icons-material/Save';
+
 import type { CreateTaskPayload, UpdateTaskInput } from "../../types"
 import { useState } from "react"
 import { z } from "zod"
@@ -112,7 +114,10 @@ const TaskForm = ({ mode = "ADD_NEW_TASK", taskId, initialData, onSuccess = () =
                 onChange={handleChange}
             />
 
-            <Button variant="contained" disabled={isPending} fullWidth onClick={handleSubmit}>{BUTTON_LABELS[mode]}</Button>
+            <Button variant="contained"
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
+                loading={isPending} fullWidth onClick={handleSubmit}>{BUTTON_LABELS[mode]}</Button>
 
         </>
     )
