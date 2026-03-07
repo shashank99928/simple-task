@@ -13,60 +13,93 @@ import Checkbox from '@mui/material/Checkbox';
 import useDeleteTask from "../../hooks/useDeleteTask";
 import { useTask } from "../../hooks/useTask"
 import useUpdateTask from "../../hooks/useUpdateTask"
+import useTaskKeyboardNavigation from "../../hooks/useTaskKeyboardNavigation"
 
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const { mutate: deleteTask } = useDeleteTask();
     const { refetch } = useTask();
-
     const { mutate: updateTask, isPending } = useUpdateTask();
 
-    const handleToggleCheckbox = (formData: Task) => {
-        const payload = {
-            ...formData,
-            completed: !formData.completed
-        }
+    const handleToggle = (formData: Task) => {
+        const payload = { ...formData, completed: !formData.completed };
         updateTask({ id: formData.id as string, payload }, {
-            onSuccess: () => {
-                refetch()
-            }
-        })
-    }
+            onSuccess: () => refetch(),
+        });
+    };
+
+    const { listRef, focusedIndex, setFocusedIndex, handleListKeyDown } =
+        useTaskKeyboardNavigation({
+            tasks,
+            isPending,
+            onToggle: handleToggle,
+            onDelete: (id) => setDeleteId(id),
+        });
 
     if (!tasks || tasks.length === 0) {
         return (
             <Container>
-                <Typography variant="h4">Task List</Typography>
-                <Typography variant="body1">No tasks found</Typography>
+                <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>No tasks found</Typography>
             </Container>
         )
     }
 
-
     return (
         <Container sx={{ mt: 2 }}>
-            <Typography variant="h6" sx={{ mx: 2 }} textAlign={"start"} fontWeight={"bold"} >Task List</Typography>
-            <List>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+                💡 Keyboard: ↑↓ navigate · Enter/Space toggle · Delete remove
+            </Typography>
+            <List
+                ref={listRef}
+                aria-label="task list"
+                onKeyDown={handleListKeyDown}
+            >
                 {tasks.map((task, index) => (
-                    <ListItem key={task.id} secondaryAction={
-                        <IconButton edge="end" aria-label="delete" onClick={() => setDeleteId(task.id as string)}>
-                            <DeleteIcon color="error" />
-                        </IconButton>
-                    }>
+                    <ListItem
+                        key={task.id}
+                        data-task-item
+                        tabIndex={index === 0 ? 0 : -1}
+                        onFocus={() => setFocusedIndex(index)}
+                        sx={{
+                            borderRadius: 1,
+                            mb: 0.5,
+                            outline: focusedIndex === index ? "2px solid" : "none",
+                            outlineColor: "primary.main",
+                            outlineOffset: "2px",
+                            "&:focus": { outline: "2px solid", outlineColor: "primary.main", outlineOffset: "2px" },
+                        }}
+                        secondaryAction={
+                            <IconButton
+                                edge="end"
+                                aria-label={`delete task ${task.title}`}
+                                onClick={() => setDeleteId(task.id as string)}
+                                tabIndex={-1}
+                            >
+                                <DeleteIcon color="error" />
+                            </IconButton>
+                        }
+                    >
                         <ListItemText primary={
                             <>
-                                <Checkbox disabled={isPending} checked={task.completed} onChange={() => {
-                                    handleToggleCheckbox(task)
-                                }} />
-
-                                <Link to={`/task/${task.id}`}>
-                                    <Typography component="span" sx={task.completed ? { textDecoration: 'line-through', color: 'gray' } : {}}>{index + 1}. {task.title}</Typography>
+                                <Checkbox
+                                    disabled={isPending}
+                                    checked={task.completed}
+                                    tabIndex={-1}
+                                    onChange={() => handleToggle(task)}
+                                    inputProps={{ "aria-label": `mark ${task.title} as ${task.completed ? "incomplete" : "complete"}` }}
+                                />
+                                <Link to={`/task/${task.id}`} tabIndex={-1}>
+                                    <Typography
+                                        component="span"
+                                        sx={task.completed ? { textDecoration: "line-through", color: "gray" } : {}}
+                                    >
+                                        {index + 1}. {task.title}
+                                    </Typography>
                                 </Link>
                             </>
                         }
                         />
-
                     </ListItem>
                 ))}
             </List>
@@ -75,11 +108,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
                 onClose={() => setDeleteId(null)}
                 onSucces={() => {
                     if (deleteId) {
-                        deleteTask(deleteId, {
-                            onSuccess: () => {
-                                refetch()
-                            }
-                        });
+                        deleteTask(deleteId, { onSuccess: () => refetch() });
                     }
                     setDeleteId(null);
                 }}
